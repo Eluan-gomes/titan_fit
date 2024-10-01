@@ -1,12 +1,12 @@
 <?php
 include 'db.php';
-session_start();
-if (!isset($_SESSION['id'])) {
-    header("Location: index.php");
-    exit;
-}
+// session_start();
+// if (!isset($_SESSION['id'])) {
+//     header("Location: usuarios.php");
+//     exit;
+// }
 
-$mysqli = new mysqli("localhost", "usuario", "senha", "academia");
+// $mysqli = new mysqli("localhost", "usuario", "senha", "academia");
 
 // Inserir novo usuário
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['acao']) && $_POST['acao'] == 'inserir') {
@@ -55,12 +55,9 @@ $usuarios = $result->fetch_all(MYSQLI_ASSOC);
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Academia</a>
+        <a class="navbar-brand" href="home.php"><img src="./assets/imgs/TITANFIT.png" alt="titan"></a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="dashboard.php">Dashboard</a>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="usuarios.php">Gerenciar Usuários</a>
                 </li>
@@ -75,30 +72,30 @@ $usuarios = $result->fetch_all(MYSQLI_ASSOC);
     <div class="container mt-4">
         <h2>Controle de Usuários</h2>
 
-        <div class="row">
+        <div class="row aling-itens-center ">
             <!-- Formulário para Inserir Usuário -->
-            <div class="col-md-6">
+            <div class="col-md-6 ">
                 <h3>Inserir Novo Usuário</h3>
                 <form method="POST" action="usuarios.php">
                     <input type="hidden" name="acao" value="inserir">
                     <div class="form-group">
                         <label for="nome">Nome</label>
-                        <input type="text" class="form-control" name="nome" required>
+                        <input type="text" class="form-control border border-info" name="nome" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" class="form-control" name="email" required>
+                        <input type="email" class="form-control border border-info" name="email" required>
                     </div>
                     <div class="form-group">
                         <label for="senha">Senha</label>
-                        <input type="password" class="form-control" name="senha" required>
+                        <input type="password" class="form-control border border-info" name="senha" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Adicionar Usuário</button>
                 </form>
             </div>
 
             <!-- Lista de Usuários -->
-            <div class="col-md-6">
+            <div class="col-md-8 p-4">
                 <h3>Usuários Cadastrados</h3>
                 <table class="table">
                     <thead>

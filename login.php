@@ -1,38 +1,61 @@
 <?php
 include('db.php');
-session_start(); // Inicie a sessão aqui para garantir que ela esteja disponível em todo o script
 
-if (isset($_POST['email']) && isset($_POST['senha'])) { // Usar '&&' para verificar ambos os campos
-    if (strlen($_POST['email']) == 0) {
+if(isset($_POST['email']) || isset($_POST['senha'])) {
+    if(strlen($_POST['email']) == 0) {
         echo "Preencha seu email";
-    } else if (strlen($_POST['senha']) == 0) {
+    } else if(strlen($_POST['senha']) == 0) {
         echo "Preencha sua senha";
     } else {
         $email = $mysqli->real_escape_string($_POST['email']);
         $senha = $mysqli->real_escape_string($_POST['senha']);
 
-        // É recomendado usar hashing para senhas. Aqui, assumindo que as senhas estão armazenadas hashed
-        $sql_code = "SELECT * FROM usuarios WHERE email = '$email'";
-        $sql_query = $mysqli->query($sql_code) or die("Falha na execução do código de busca: " . $mysqli->error);
+        $sql_code = "SELECT * FROM usuarios WHERE email = '$email' AND senha = '$senha'";
+        $sql_query = $mysqli->query($sql_code) or die("Falha na execução do código de busca").$mysqli->error;
 
         $quantidade = $sql_query->num_rows;
 
-        if ($quantidade == 1) {
+        if($quantidade == 1) {
             $usuario = $sql_query->fetch_assoc();
-            
-            // Verificar a senha usando password_verify se a senha estiver hasheada
-            if (password_verify($senha, $usuario['senha'])) {
-                $_SESSION['user'] = $usuario['id'];
-                $_SESSION['nome'] = $usuario['nome'];
 
-                header("Location: dashboard.php");
-                exit(); // Adicione exit() após header() para garantir que o script pare aqui
-            } else {
-                echo "Falha ao logar! email ou senha inválidos";
+            if(!isset($_SESSION)) {
+                session_start();
             }
+
+            $_SESSION['user'] = $usuario['id'];
+            $_SESSION['nome'] = $usuario['nome'];
+
+            header("Location: home.php");
         } else {
             echo "Falha ao logar! email ou senha inválidos";
         }
     }
 }
 ?>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="flex justify-center items-center h-screen bg-red-700">
+    <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-sm">
+    <img class="block mx-auto" src="./assets/imgs/TITANFIT.png" alt="titan">
+        <form action="" method="POST">
+            <div class="mb-5">
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+                <input type="text" name="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Seu e-mail">
+            </div>
+            <div class="mb-5">
+                <label for="senha" class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+                <input type="password" name="senha" id="senha" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Sua senha">
+            </div>
+            <div class="text-center">
+                <button type="submit" class="bg-red-700 text-white rounded-full px-10 py-2 font-bold hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-blue-400">Entrar</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
