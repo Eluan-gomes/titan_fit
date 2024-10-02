@@ -10,12 +10,12 @@ include 'db.php';
 
 // Inserir novo usuário
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['acao']) && $_POST['acao'] == 'inserir') {
-    $usuario = $_POST['usuario'];
+    $nome = $_POST['nome'];
     $email = $_POST['email'];
     $senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
 
-    $stmt = $mysqli->prepare("INSERT INTO usuarios (usuario, email, senha) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $usuario, $email, $senha);
+    $stmt = $mysqli->prepare("INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $nome, $email, $senha);
     $stmt->execute();
     header("Location: usuarios.php");
 }
@@ -23,11 +23,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['acao']) && $_POST['aca
 // Editar usuário
 if (isset($_POST['acao']) && $_POST['acao'] == 'editar') {
     $id = $_POST['id'];
-    $usuario = $_POST['usuario'];
+    $nome = $_POST['nome'];
     $email = $_POST['email'];
 
-    $stmt = $mysqli->prepare("UPDATE usuarios SET usuario = ?, email = ? WHERE id = ?");
-    $stmt->bind_param("ssi", $usuario, $email, $id);
+    $stmt = $mysqli->prepare("UPDATE usuarios SET nome = ?, email = ? WHERE id = ?");
+    $stmt->bind_param("ssi", $nome, $email, $id);
     $stmt->execute();
     header("Location: usuarios.php");
 }
@@ -96,20 +96,20 @@ $usuarios = $result->fetch_all(MYSQLI_ASSOC);
             </div>
           </div>
         </div>
-    </nav>
+  </nav>
 
-    <div class="container mx-auto px-4 py-8">
-        <h2 class="text-2xl font-bold mb-6">Controle de Usuários</h2>
+    <div class="container mx-auto mt-8">
+        <h2 class="text-2xl font-semibold mb-4">Controle de Usuários</h2>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="flex space-x-8">
             <!-- Formulário para Inserir Usuário -->
-            <div class="bg-white shadow-md rounded-lg p-6">
+            <div class="w-1/2 bg-white p-6 rounded-lg shadow-md">
                 <h3 class="text-xl font-semibold mb-4">Inserir Novo Usuário</h3>
                 <form method="POST" action="usuarios.php">
                     <input type="hidden" name="acao" value="inserir">
                     <div class="mb-4">
-                        <label for="usuario" class="block text-gray-700 font-medium mb-2">usuario</label>
-                        <input type="text" name="usuario" class="w-full border border-blue-400 p-2 rounded focus:outline-none focus:border-blue-500" required>
+                        <label for="nome" class="block text-gray-700 font-medium mb-2">Nome</label>
+                        <input type="text" name="nome" class="w-full border border-blue-400 p-2 rounded focus:outline-none focus:border-blue-500" required>
                     </div>
                     <div class="mb-4">
                         <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
@@ -124,15 +124,15 @@ $usuarios = $result->fetch_all(MYSQLI_ASSOC);
             </div>
 
             <!-- Lista de Usuários -->
-            <div class="bg-white shadow-md rounded-lg p-6">
+            <div class="w-2/3 bg-white p-6 rounded-lg shadow-md">
                 <h3 class="text-xl font-semibold mb-4">Usuários Cadastrados</h3>
-                <table class="min-w-full table-auto">
+                <table class="w-full text-left table-auto">
                     <thead>
                         <tr class="bg-gray-200 text-gray-600 uppercase text-sm">
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">usuario$usuario</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
+                            <th class="px-4 py-2">ID</th>
+                            <th class="px-4 py-2">Nome</th>
+                            <th class="px-4 py-2">Email</th>
+                            <th class="px-4 py-2">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -140,18 +140,18 @@ $usuarios = $result->fetch_all(MYSQLI_ASSOC);
                             <tr class="border-t">
                                 <form method="POST" action="usuarios.php">
                                     <input type="hidden" name="acao" value="editar">
-                                    <input type="hidden" name="id" value="<?php echo isset($usuario['id']) ? $usuario['id'] : ''; ?>">
-                                    <td class="px-4 py-2"><?php echo isset($usuario['id']) ? $usuario['id'] : ''; ?></td>
+                                    <input type="hidden" name="id" value="<?= $usuario['id'] ?>">
+                                    <td class="px-4 py-2"><?= $usuario['id'] ?></td>
                                     <td class="px-4 py-2">
-                                        <input type="text" name="usuario" value="<?php echo isset($usuario['usuario']) ? $usuario['usuario'] : ''; ?>" class="w-full border border-gray-300 p-1 rounded">
+                                        <input type="text" name="nome" value="<?= $usuario['nome'] ?>" class="w-full border border-gray-300 p-1 rounded">
                                     </td>
                                     <td class="px-4 py-2">
-                                        <input type="email" name="email" value="<?php echo isset($usuario['email']) ? $usuario['email'] : ''; ?>" class="w-full border border-gray-300 p-1 rounded">
+                                        <input type="email" name="email" value="<?= $usuario['email'] ?>" class="w-full border border-gray-300 p-1 rounded">
                                     </td>
                                     <td class="px-4 py-2 text-center">
                                         <div class="inline-flex space-x-2">
                                             <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white font-medium px-4 py-1 rounded-md">Salvar</button>
-                                            <a href="usuarios.php?acao=excluir&id=<?php echo isset($usuario['id']) ? $usuario['id'] : ''; ?>" class="bg-red-500 hover:bg-red-600 text-white font-medium px-4 py-1 rounded-md">Excluir</a>
+                                            <a href="usuarios.php?acao=excluir&id=<?= $usuario['id'] ?>" class="bg-red-500 hover:bg-red-600 text-white font-medium px-4 py-1 rounded-md">Excluir</a>
                                         </div>
                                     </td>
                                 </form>
@@ -162,12 +162,6 @@ $usuarios = $result->fetch_all(MYSQLI_ASSOC);
             </div>
         </div>
     </div>
-
-    <footer class="bg-gray-200 py-4">
-        <div class="container mx-auto text-center">
-            <p class="text-gray-600">Dev Titan</p>
-        </div>
-    </footer>
 
 </body>
 </html>
