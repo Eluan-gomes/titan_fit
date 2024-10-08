@@ -1,0 +1,12 @@
+#400e28
+#992f4d
+#f25872
+#f08e73
+#e8b787
+
+## ID EM HEXADECIMAL E CÓDIGO CSS
+.color1 { #400e28 };
+.color2 { #992f4d };
+.color3 { #f25872 };
+.color4 { #f08e73 };
+.color5 { #e8b787 };
