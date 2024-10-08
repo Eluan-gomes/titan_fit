@@ -1,6 +1,6 @@
 <?php
 
-include '../db.php';
+include './db.php';
 
 
 // Conexão com o banco de dados e busca de atividades
@@ -14,16 +14,16 @@ $atividades = $resultAtividades->fetch_all(MYSQLI_ASSOC);
 
 $profissionais = [
 
-    ['nome' => 'Carlos Silva', 'funcao' => 'Personal Trainer', 'experiencia' => '5 anos', 'imagem' => '../assets/imgs/mariaclaudia.avif'],
+    ['nome' => 'Carlos Silva', 'funcao' => 'Personal Trainer', 'experiencia' => '5 anos', 'imagem' => './assets/imgs/mariaclaudia.avif'],
 
-    ['nome' => 'Maria Oliveira', 'funcao' => 'Instrutora yoga', 'experiencia' => '3 anos', 'imagem' => '../assets/imgs/mariaclaudia.avif'],
+    ['nome' => 'Maria Oliveira', 'funcao' => 'Instrutora yoga', 'experiencia' => '3 anos', 'imagem' => './assets/imgs/mariaclaudia.avif'],
 
-    ['nome' => 'Maria Claudia', 'funcao' => 'Personal Trainer', 'experiencia' => '7 anos', 'imagem' => '../assets/imgs/mariaclaudia.avif'],
+    ['nome' => 'Maria Claudia', 'funcao' => 'Personal Trainer', 'experiencia' => '7 anos', 'imagem' => './assets/imgs/mariaclaudia.avif'],
 
-    ['nome' => 'Renata Souza', 'funcao' => 'Personal Trainer', 'experiencia' => '7 anos', 'imagem' => '../assets/imgs/mariaclaudia.avif'],
+    ['nome' => 'Renata Souza', 'funcao' => 'Personal Trainer', 'experiencia' => '7 anos', 'imagem' => './assets/imgs/mariaclaudia.avif'],
 
-    ['nome' => 'Renata Souza', 'funcao' => 'Personal Trainer', 'experiencia' => '7 anos', 'imagem' => '../assets/imgs/mariaclaudia.avif'],
-    ['nome' => 'Renata Souza', 'funcao' => 'Personal Trainer', 'experiencia' => '7 anos', 'imagem' => '../assets/imgs/mariaclaudia.avif'],
+    ['nome' => 'Renata Souza', 'funcao' => 'Personal Trainer', 'experiencia' => '7 anos', 'imagem' => './assets/imgs/mariaclaudia.avif'],
+    ['nome' => 'Renata Souza', 'funcao' => 'Personal Trainer', 'experiencia' => '7 anos', 'imagem' => './assets/imgs/mariaclaudia.avif'],
 
 ];
 
@@ -64,7 +64,9 @@ $profissionais = [
 .bg-gray {
     background-color: #e8b787;
 }
-
+.text-blue {
+  color: #f08e73;
+}
 .text-white {
     color: #f25872;
 }
@@ -117,6 +119,14 @@ html {
 #profissionaisCarousel {
     display: flex;
     justify-content: center;
+}
+#carousel-image {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transition: all 0.7s;
+    backdrop-filter: blur(10px); /* Desfoque de 10px */
 }
 
     </style>
@@ -171,20 +181,28 @@ html {
 </script>
 
 
-
-<!-- Hero Section with Carousel Background -->
 <section class="relative">
     <div class="relative h-screen overflow-hidden">
-        <div id="carousel" class="absolute inset-0 bg-cover bg-center transition-all duration-700">
-            <img src="../assets/imgs/imagem1.jpg" id="carousel-image" class="w-full h-full object-cover" alt="Hero Background">
-        </div>
-        <div class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+        <!-- <div id="carousel" class="absolute inset-0 bg-cover bg-center transition-all duration-700">
+            <img src="./assets/imgs/imagem1.jpg" id="carousel-image" class="w-full h-full object-cover" alt="Hero Background">
+        </div> -->
+        <!-- <div class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
             <div class="text-center text-white">
                 <h1 class="text-6xl font-bold uppercase tracking-wide">No Pain No Gain</h1>
                 <p class="text-xl mt-4 mb-8">Having a perfect body requires a lot of training. We can help you with both fitness and power.</p>
                 <a href="#conheca" class="bg-red-500 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full text-lg transition duration-300 ease-in-out">Nos Conheça</a>
             </div>
+        </div> -->
+        <div id="carousel" class="relative h-screen overflow-hidden">
+        <img src="./assets/imgs/1.png" id="carousel-image" class="w-full h-full object-cover" alt="Hero Background">
+    </div>
+    <div class="absolute inset-0 bg-transparent bg-opacity-50 flex justify-center items-center">
+        <div class="text-center text-gray-900 backdrop-blur-md p-8 rounded">
+            <h1 class="text-6xl font-bold uppercase tracking-wide">No Pain No Gain</h1>
+            <p class="text-xl mt-4 mb-8">Having a perfect body requires a lot of training. We can help you with both fitness and power.</p>
+            <a href="#conheca" class="bg-red-500 text-gray font-bold py-3 px-6 rounded-full text-lg transition duration-300 ease-in-out">Nos Conheça</a>
         </div>
+    </div>
 
         <!-- Navigation Buttons -->
         <div class="absolute inset-y-0 left-0 flex items-center">
@@ -198,30 +216,36 @@ html {
 
 <!-- Carousel Script for the Hero Section -->
 <script>
-const images = [
-        '../assets/imgs/imagem1.jpg',
-        '../assets/imgs/imagem2.jpg',
-        '../assets/imgs/imagem3.jpg'
-    ];
-    let currentIndex = 0;
-    const imgElement = document.getElementById('carousel-image');
+    document.addEventListener('DOMContentLoaded', function() {
+        const images = [
+            './assets/imgs/1.png',
+            './assets/imgs/2.png',
+            './assets/imgs/3.png',
+            './assets/imgs/4.png'
+        ];
+        let currentIndex = 0;
+        const imgElement = document.getElementById('carousel-image');
 
-    document.getElementById('next').addEventListener('click', () => {
-        currentIndex = (currentIndex + 1) % images.length;
-        imgElement.src = images[currentIndex];
+        document.getElementById('next').addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % images.length;
+            imgElement.src = images[currentIndex];
+        });
+
+        document.getElementById('prev').addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            imgElement.src = images[currentIndex];
+        });
+
+        // Auto play functionality
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % images.length;
+            imgElement.src = images[currentIndex];
+        }, 5000); // Change image every 5 seconds
     });
-
-    document.getElementById('prev').addEventListener('click', () => {
-        currentIndex = (currentIndex - 1 + images.length) % images.length;
-        imgElement.src = images[currentIndex];
-    });
-
-    // Auto play functionality
-    setInterval(() => {
-        currentIndex = (currentIndex + 1) % images.length;
-        imgElement.src = images[currentIndex];
-    }, 5000); // Change image every 5 seconds
 </script>
+
+
+
 
 <section class="bg-gray py-12" id="conheca">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -1,0 +1,65 @@
+melhor para verem as perguntas:
+certo, mais que dores, esta ia estaria sanando, quem duvidas, problemas ela estaria resolvendo para a populacao, que o proprio maps nao faria com essas ferramentas??
+
+sim, e é justamente isso que em tese vcs com esse projeto estao querendo mostrar
+
+tem de se encontrar alguma coisa que essas ferramentas nao oferecem para a populacao
+
+por exemplo, hj em dia, o sistema publico de transporte de teresina, todos sabemos que e uma bagunca, ja existe uma ferramenta que permite vizualizar quais onibus estao em rotas, mas os onibus vivem lotados e se ouvesse uma ferramenta que ligasse a contagem de passageiros a um sistema, mostrando para o cidadao que esta voltando do trabalho, vai poder voltar descancando no assento
+
+pensem dessa forma
+ 
+
+achar algo nao especifico dentro da problematica de trafego urbano
+
+vcs alem de matar a problematica ces ja matam a solucao e o resto seria apenmaas desenvolvimento e brainstorm de ideias para essa solucao
+
+exatamente, ja que a funcao deste seria basicamente a mesma, do jeito que e pensado hj
+ vou ali ja eu volto
+
+ voltei
+ entt encerrando a reuniao por hoje, fica para voces, me enviarem as duvidas, e achar esta solucao, visando melhorias para o cidadao, e para a cidade
+  fechou??
+blz, so coloquem os nomes de quem participou da reuniao de hj la no grupo
+
+
+
+
+
+
+
+
+
+<<table class="min-w-full table-auto">
+                    <thead>
+                        <tr class="bg-muted text-secondary uppercase text-sm">
+                            <th class="px-4 py-2 text-left">ID</th>
+                            <th class="px-4 py-2 text-left">Usuário</th>
+                            <th class="px-4 py-2 text-left">Email</th>
+                            <th class="px-4 py-2 text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($usuarios as $usuario): ?>
+                            <tr class="border-t">
+                                <form method="POST" action="usuarios.php">
+                                    <input type="hidden" name="acao" value="editar">
+                                    <input type="hidden" name="id" value="<?php echo isset($usuario['id']) ? $usuario['id'] : ''; ?>">
+                                    <td class="px-4 py-2"><?php echo isset($usuario['id']) ? $usuario['id'] : ''; ?></td>
+                                    <td class="px-4 py-2">
+                                        <input type="text" name="usuario" value="<?php echo isset($usuario['usuario']) ? $usuario['usuario'] : ''; ?>" class="w-full border border-muted p-1 rounded text-primary">
+                                    </td>
+                                    <td class="px-4 py-2">
+                                        <input type="email" name="email" value="<?php echo isset($usuario['email']) ? $usuario['email'] : ''; ?>" class="w-full border border-muted p-1 rounded text-primary">
+                                    </td>
+                                    <td class="px-4 py-2 text-center">
+                                        <div class="inline-flex space-x-2">
+                                            <button type="submit" class="bg-accent hover:bg-secondary text-white font-medium px-4 py-1 rounded-md">Salvar</button>
+                                            <a href="usuarios.php?acao=excluir&id=<?php echo isset($usuario['id']) ? $usuario['id'] : ''; ?>" class="bg-red-500 hover:bg-red-700 text-white font-medium px-4 py-1 rounded-md">Excluir</a>
+                                        </div>
+                                    </td>
+                                </form>
+                            </tr> 
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>

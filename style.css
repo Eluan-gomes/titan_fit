@@ -1,0 +1,74 @@
+
+
+.bg-red-600 {
+    background-color: #992f4d;
+}
+
+.bg-white {
+    background-color: #f08e73;
+}
+
+.bg-black {
+    background-color: #400e28;
+}
+.bg-gray {
+    background-color: #e8b787;
+}
+.text-blue {
+  color: #f08e73;
+}
+.text-white {
+    color: #f25872;
+}
+.text-white-500 {
+    color: #e8b787;
+}
+.text-gray {
+    color: #992f4d;
+}
+
+
+.bg-red-500 {
+    background-color: #e8b787;
+}
+
+#carousel img {
+    object-fit: cover;
+}
+
+.min-w-[px] {
+    background-color: #e8b787;
+}
+
+#carousel img {
+    object-fit: cover;
+}
+
+#profissionaisCarousel {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+#navbar-menu {
+    padding: 2px;
+}
+html {
+    scroll-behavior: smooth;
+}
+#profissionaisCarouselWrapper {
+    display: flex;
+    justify-content: center;
+}
+
+#profissionaisCarousel {
+    display: flex;
+    justify-content: center;
+}
+#carousel-image {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transition: all 0.7s;
+    backdrop-filter: blur(10px); /* Desfoque de 10px */
+}

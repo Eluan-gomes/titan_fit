@@ -1,24 +1,32 @@
 <?php
 include 'db.php';
-// session_start();
-// if (!isset($_SESSION['id'])) {
-//     header("Location: usuarios.php");
-//     exit;
-// }
-
-// $mysqli = new mysqli("localhost", "usuario", "senha", "academia");
 
 // Inserir novo usuário
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['acao']) && $_POST['acao'] == 'inserir') {
     $usuario = $_POST['usuario'];
     $email = $_POST['email'];
-    $senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
+    $senha = $_POST['senha'];
+    $role_id = $_POST['role_id'];
+    // Prepare a consulta
+    $stmt = $mysqli->prepare("INSERT INTO usuarios (usuario, email, senha, role_id) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("sssi", $usuario, $email, $senha, $role_id);
 
-    $stmt = $mysqli->prepare("INSERT INTO usuarios (usuario, email, senha) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $usuario, $email, $senha);
-    $stmt->execute();
+    // Execute a consulta
+    if ($stmt->execute()) {
+        echo "Usuário cadastrado com sucesso!";
+    } else {
+        echo "Erro ao cadastrar usuário: " . $stmt->error;
+    }
+
+    // Feche a declaração e a conexão
+    $stmt->close();
+    $mysqli->close();
+
+    // Redirecione para a página de usuários
     header("Location: usuarios.php");
+    exit();
 }
+
 
 // Editar usuário
 if (isset($_POST['acao']) && $_POST['acao'] == 'editar') {
@@ -35,10 +43,27 @@ if (isset($_POST['acao']) && $_POST['acao'] == 'editar') {
 // Excluir usuário
 if (isset($_GET['acao']) && $_GET['acao'] == 'excluir' && isset($_GET['id'])) {
     $id = $_GET['id'];
-    $stmt = $mysqli->prepare("DELETE FROM usuarios WHERE id = ?");
+    
+    // Conecte-se ao banco de dado
+
+    // Prepare a consulta
+    $stmt = $mysqli->prepare("DELETE FROM usuarios WHERE id_user = ?");
     $stmt->bind_param("i", $id);
-    $stmt->execute();
+
+    // Execute a consulta
+    if ($stmt->execute()) {
+        echo "Usuário excluído com sucesso!";
+    } else {
+        echo "Erro ao excluir usuário: " . $stmt->error;
+    }
+
+    // Feche a declaração e a conexão
+    $stmt->close();
+    $mysqli->close();
+
+    // Redirecione para a página de usuários
     header("Location: usuarios.php");
+    exit();
 }
 
 // Listar usuários
@@ -53,86 +78,130 @@ $usuarios = $result->fetch_all(MYSQLI_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle de Usuários - Academia</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Acetone&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jhon+O&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sans+Portler&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sportage&display=swap">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .bg-primary {
+            background-color: #400e28;
+        }
+
+        .bg-secondary {
+            background-color: #992f4d;
+        }
+
+        .bg-accent {
+            background-color: #f25872;
+        }
+
+        .bg-light {
+            background-color: #f08e73;
+        }
+
+        .bg-muted {
+            background-color: #e8b787;
+        }
+
+        .text-primary {
+            color: #400e28;
+        }
+
+        .text-secondary {
+            color: #992f4d;
+        }
+
+        .text-accent {
+            color: #f25872;
+        }
+
+        .text-light {
+            color: #f08e73;
+        }
+
+        .text-muted {
+            color: #e8b787;
+        }
+    </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-primary text-light">
 
     <!-- Navbar -->
-    <nav class="bg-red-600">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="flex h-16 items-center justify-between">
-        <div class="flex items-center">
-          <div class="flex-shrink-0">
-            <img class="h-auto w-15" src="./assets/imgs/TITANFIT.png" alt="Your Company">
-          </div>
-          <div class="hidden md:block">
-            <div class="ml-10 flex items-baseline space-x-4">
-              <a href="usuarios.php" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" aria-current="page">Ger Users</a>
-              <a href="atividades.php" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Ger Atividades</a>
-            </div>
-          </div>
-        </div>
-        <div class="hidden md:block">
-          <div class="ml-4 flex items-center md:ml-6">
-            <button type="button" class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-              <span class="absolute -inset-1.5"></span>
-              <span class="sr-only">View notifications</span>
-              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-              </svg>
-            </button>
-            <div class="relative ml-3">
-              <div>
+    <nav class="shadow bg-light">
+        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+            <div class="relative flex justify-between h-16">
+                <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+                    <div class="block sm:hidden">
+                        <button id="navbar-toggle" class="text-muted hover:text-secondary focus:outline-none">
+                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="navbar-menu" class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="./admin/homeAdmin.php" class="text-primary inline-flex items-center px-1 pt-1 text-3xl font-serif hover:border-red-500 hover:shadow-md border-b-2 border-transparent">Titan Fit</a>
+                        <a href="./usuarios.php" class="border-transparent hover:border-accent text-primary inline-flex items-center px-1 pt-1 hover:border-red-500 hover:shadow-md border-b-2 border-transparent text-sm font-medium">Ger Users</a>
+                        <a href="./atividades.php" class="border-transparent text-primary hover:border-accent inline-flex items-center px-1 pt-1 hover:border-red-500 hover:shadow-md border-b-2 border-transparent text-sm font-medium">Ger Atividades</a>
+                    </div>
+                    <div class="absolute inset-y-0 right-0 flex items-center">
+                        <div class="mr-5">
                 <button type="button" class="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                   <span class="absolute -inset-1.5"></span>
                   <span class="sr-only">Open user menu</span>
                   <img class="h-8 w-8 rounded-full" src="./assets/imgs/carlos.jpeg" alt="">
-                </button>
-              </div>
-              <!-- <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-                <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
-                <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
-                <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
-              </div> -->
+                    </button>
+                    </div>
+                        <a href="../logout.php" class="border-transparent text-primary hover:border-accent inline-flex items-center px-1 pt-1 hover:border-red-500 hover:shadow-md border-b-2 border-transparent text-sm font-medium">Sair</a>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
     </nav>
 
     <div class="container mx-auto px-4 py-8">
-        <h2 class="text-2xl font-bold mb-6">Controle de Usuários</h2>
+        <h2 class="text-2xl font-bold mb-6 text-center font-serif">Controle de Usuários</h2>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Formulário para Inserir Usuário -->
-            <div class="bg-white shadow-md rounded-lg p-6">
-                <h3 class="text-xl font-semibold mb-4">Inserir Novo Usuário</h3>
+            <div class="bg-light shadow-md rounded-lg p-6">
+                <h3 class="text-xl font-semibold mb-4 text-primary">Inserir Novo Usuário</h3>
                 <form method="POST" action="usuarios.php">
                     <input type="hidden" name="acao" value="inserir">
                     <div class="mb-4">
-                        <label for="usuario" class="block text-gray-700 font-medium mb-2">usuario</label>
-                        <input type="text" name="usuario" class="w-full border border-blue-400 p-2 rounded focus:outline-none focus:border-blue-500" required>
+                        <label for="usuario" class="block text-secondary font-medium mb-2">Usuário</label>
+                        <input type="text" name="usuario" class="w-full border border-muted p-2 rounded focus:outline-none focus:border-accent text-primary" required>
                     </div>
                     <div class="mb-4">
-                        <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
-                        <input type="email" name="email" class="w-full border border-blue-400 p-2 rounded focus:outline-none focus:border-blue-500" required>
+                        <label for="email" class="block text-secondary font-medium mb-2">Email</label>
+                        <input type="email" name="email" class="w-full border border-muted p-2 rounded focus:outline-none focus:border-accent text-primary" required>
                     </div>
                     <div class="mb-4">
-                        <label for="senha" class="block text-gray-700 font-medium mb-2">Senha</label>
-                        <input type="password" name="senha" class="w-full border border-blue-400 p-2 rounded focus:outline-none focus:border-blue-500" required>
+                        <label for="senha" class="block text-secondary font-medium mb-2">Senha</label>
+                        <input type="password" name="senha" class="w-full border border-muted p-2 rounded focus:outline-none focus:border-accent text-primary" required>
                     </div>
-                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Adicionar Usuário</button>
+                    <div class="mb-4">
+            <label for="role_id" class="block text-secondary font-medium mb-2">Tipo de Usuário</label>
+            <select name="role_id" class="w-full border border-muted p-2 rounded focus:outline-none focus:border-accent text-primary" required>
+                <option value="">Selecione o tipo de usuário</option>
+                <option value="1">Administrador</option>
+                <option value="2">Cliente</option>
+            </select>
+        </div>
+                    <button type="submit" class="bg-accent text-white px-4 py-2 rounded hover:bg-secondary">Adicionar Usuário</button>
                 </form>
             </div>
 
             <!-- Lista de Usuários -->
-            <div class="bg-white shadow-md rounded-lg p-6">
-                <h3 class="text-xl font-semibold mb-4">Usuários Cadastrados</h3>
+            <div class="bg-light shadow-md rounded-lg p-6">
+                <h3 class="text-xl text-primary font-semibold mb-4">Usuários Cadastrados</h3>
                 <table class="min-w-full table-auto">
                     <thead>
-                        <tr class="bg-gray-200 text-gray-600 uppercase text-sm">
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">usuario$usuario</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
+                        <tr class="bg-muted text-secondary uppercase text-sm">
+                            <th class="px-4 py-2 text-left">ID</th>
+                            <th class="px-4 py-2 text-left">Usuário</th>
+                            <th class="px-4 py-2 text-left">Email</th>
+                            <th class="px-4 py-2 text-center">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -141,33 +210,73 @@ $usuarios = $result->fetch_all(MYSQLI_ASSOC);
                                 <form method="POST" action="usuarios.php">
                                     <input type="hidden" name="acao" value="editar">
                                     <input type="hidden" name="id" value="<?php echo isset($usuario['id']) ? $usuario['id'] : ''; ?>">
-                                    <td class="px-4 py-2"><?php echo isset($usuario['id']) ? $usuario['id'] : ''; ?></td>
-                                    <td class="px-4 py-2">
-                                        <input type="text" name="usuario" value="<?php echo isset($usuario['usuario']) ? $usuario['usuario'] : ''; ?>" class="w-full border border-gray-300 p-1 rounded">
+                                    <td class="border px-4 py-2"><?php echo isset($usuario['id']) ? $usuario['id'] : ''; ?></td>
+                                    <td class="border px-4 py-2">
+                                        <input type="text" name="usuario" value="<?php echo isset($usuario['usuario']) ? $usuario['usuario'] : ''; ?>" class="w-full border border-gray-300 p-1 rounded-md text-primary">
                                     </td>
-                                    <td class="px-4 py-2">
-                                        <input type="email" name="email" value="<?php echo isset($usuario['email']) ? $usuario['email'] : ''; ?>" class="w-full border border-gray-300 p-1 rounded">
+                                    <td class="border px-4 py-2">
+                                        <input type="email" name="email" value="<?php echo isset($usuario['email']) ? $usuario['email'] : ''; ?>" class="w-full border border-gray-300 p-1 rounded-md text-primary">
                                     </td>
-                                    <td class="px-4 py-2 text-center">
+                                    <td class="border px-4 py-2 text-center">
                                         <div class="inline-flex space-x-2">
-                                            <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white font-medium px-4 py-1 rounded-md">Salvar</button>
-                                            <a href="usuarios.php?acao=excluir&id=<?php echo isset($usuario['id']) ? $usuario['id'] : ''; ?>" class="bg-red-500 hover:bg-red-600 text-white font-medium px-4 py-1 rounded-md">Excluir</a>
+                                            <button type="submit" class="bg-accent hover:bg-secondary text-white font-medium px-4 py-1 rounded-md">Salvar</button>
+                                            <a href="usuarios.php?acao=excluir&id=<?php echo isset($usuario['id']) ? $usuario['id'] : ''; ?>" class="bg-red-500 hover:bg-red-700 text-white font-medium px-4 py-1 rounded-md">Excluir</a>
                                         </div>
                                     </td>
                                 </form>
-                            </tr>
+                            </tr> 
                         <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
-        </div>
-    </div>
+            <div class="bg-light shadow-md rounded-lg p-6 mt-6">
+    <h3 class="text-xl text-primary font-semibold mb-4">Contatos Recebidos</h3>
+    <table class="min-w-full table-auto">
+        <thead>
+            <tr class="bg-muted text-secondary uppercase text-sm">
+                <th class="px-4 py-2 text-left">Nome</th>
+                <th class="px-4 py-2 text-left">Email</th>
+                <th class="px-4 py-2 text-left">Mensagem</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            // Conecte-se ao banco de dados e busque os contatos
+            $mysqli = new mysqli("localhost", "user", "password", "database");
 
-    <footer class="bg-gray-200 py-4">
-        <div class="container mx-auto text-center">
-            <p class="text-gray-600">Dev Titan</p>
-        </div>
-    </footer>
+            if ($mysqli->connect_error) {
+                die("Conexão falhou: " . $mysqli->connect_error);
+            }
 
+            $result = $mysqli->query("SELECT nome, email, mensagem FROM contatos");
+
+            if ($result->num_rows > 0) {
+                while($contato = $result->fetch_assoc()) {
+                    echo "<tr class='border-t'>
+                            <td class='px-4 py-2'>" . htmlspecialchars($contato['nome']) . "</td>
+                            <td class='px-4 py-2'>" . htmlspecialchars($contato['email']) . "</td>
+                            <td class='px-4 py-2'>" . htmlspecialchars($contato['mensagem']) . "</td>
+                          </tr>";
+                }
+            } else {
+                echo "<tr class='border-t'>
+                        <td class='px-4 py-2' colspan='3'>Nenhum contato recebido.</td>
+                      </tr>";
+            }
+
+            $mysqli->close();
+            ?>
+        </tbody>
+    </table>
+</div>
+
+
+    <script>
+        const toggleButton = document.getElementById('navbar-toggle');
+        const navbarMenu = document.getElementById('navbar-menu');
+        toggleButton.addEventListener('click', function () {
+            navbarMenu.classList.toggle('hidden');
+        });
+    </script>
 </body>
 </html>

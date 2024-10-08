@@ -48,78 +48,7 @@ $profissionais = [
 
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="./tailwind.config.js"></script>
-    <style>
-
-.bg-red-600 {
-    background-color: #992f4d;
-}
-
-.bg-white {
-    background-color: #f08e73;
-}
-
-.bg-black {
-    background-color: #400e28;
-}
-.bg-gray {
-    background-color: #e8b787;
-}
-
-.text-white {
-    color: #f25872;
-}
-.text-white-500 {
-    color: #e8b787;
-}
-.text-gray {
-    color: #992f4d;
-}
-
-
-.bg-red-500 {
-    background-color: #e8b787;
-}
-
-#carousel img {
-    object-fit: cover;
-}
-
-.min-w-[300px] {
-    background-color: #e8b787;
-}
-
-#carousel img {
-    object-fit: cover;
-}
-
-#profissionaisCarousel {
-    display: flex;
-    transition: transform 0.5s ease;
-}
-
-#atividadesCarousel {
-
-}
-#navbar-menu {
-    padding: 2px;
-}
-#carousel {
-
-}
-html {
-    scroll-behavior: smooth;
-}
-#profissionaisCarouselWrapper {
-    display: flex;
-    justify-content: center;
-}
-
-#profissionaisCarousel {
-    display: flex;
-    justify-content: center;
-}
-
-    </style>
+    <link rel="stylesheet" href="../style.css">
 
 </head>
 
@@ -153,9 +82,16 @@ html {
                 </div>
                 <!-- Navbar Links -->
                 <div id="navbar-menu" class="hidden sm:ml-6 sm:flex sm:space-x-8">
-                    <a href="home.php" class=" text-gray-900 inline-flex items-center px-1 pt-1 text-3xl font-serif hover:border-red-500 hover:shadow-md border-b-2 border-transparent">Titan Fit</a>
-                    <a href="usuarios.php" class="border-transparent hover:border-red-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Ger Users</a>
-                    <a href="atividades.php" class="border-transparent text-gray-900 hover:border-red-500 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Ger Atividades</a>
+                    <a href="homeClient.php" class=" text-gray-900 inline-flex items-center px-1 pt-1 text-3xl font-serif hover:border-red-500 hover:shadow-md border-b-2 border-transparent">Titan Fit</a>
+                    <a href="#conheca" class="border-transparent hover:border-red-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Nos Conheca</a>
+                    <a href="../contato.php" class="border-transparent hover:border-red-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Contato</a>
+
+                    <!-- <a href="usuarios.php" class="border-transparent hover:border-red-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Ger Users</a>
+                    <a href="atividades.php" class="border-transparent text-gray-900 hover:border-red-500 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Ger Atividades</a> -->
+                </div>
+                <div class="absolute inset-y-0 right-0 flex items-center">
+                <a href="perfilCliente.php" class=" text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-serif hover:border-red-500 hover:shadow-md border-b-2 border-transparent">Meu Perfil</a>
+                    <a href="../logout.php" class="border-transparent text-gray-900 hover:border-red-500 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Sair</a>
                 </div>
             </div>
         </div>
@@ -171,20 +107,28 @@ html {
 </script>
 
 
-
-<!-- Hero Section with Carousel Background -->
 <section class="relative">
     <div class="relative h-screen overflow-hidden">
-        <div id="carousel" class="absolute inset-0 bg-cover bg-center transition-all duration-700">
-            <img src="../assets/imgs/imagem1.jpg" id="carousel-image" class="w-full h-full object-cover" alt="Hero Background">
-        </div>
-        <div class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+        <!-- <div id="carousel" class="absolute inset-0 bg-cover bg-center transition-all duration-700">
+            <img src="./assets/imgs/imagem1.jpg" id="carousel-image" class="w-full h-full object-cover" alt="Hero Background">
+        </div> -->
+        <!-- <div class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
             <div class="text-center text-white">
                 <h1 class="text-6xl font-bold uppercase tracking-wide">No Pain No Gain</h1>
                 <p class="text-xl mt-4 mb-8">Having a perfect body requires a lot of training. We can help you with both fitness and power.</p>
                 <a href="#conheca" class="bg-red-500 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full text-lg transition duration-300 ease-in-out">Nos Conheça</a>
             </div>
+        </div> -->
+        <div id="carousel" class="relative h-screen overflow-hidden">
+        <img src="../assets/imgs/1.png" id="carousel-image" class="w-full h-full object-cover" alt="Hero Background">
+    </div>
+    <div class="absolute inset-0 bg-transparent bg-opacity-50 flex justify-center items-center">
+        <div class="text-center text-gray-900 backdrop-blur-md p-8 rounded">
+            <h1 class="text-6xl font-bold uppercase tracking-wide">SEM DOR SEM GANHO</h1>
+            <p class="text-xl mt-4 mb-8">Ter um corpo perfeito requer muito treino. Podemos ajudá-lo com condicionamento físico e potência.</p>
+            <a href="#conheca" class="bg-red-500 text-gray font-bold py-3 px-6 rounded-full text-lg transition duration-300 ease-in-out">Nos Conheça</a>
         </div>
+    </div>
 
         <!-- Navigation Buttons -->
         <div class="absolute inset-y-0 left-0 flex items-center">
@@ -198,30 +142,36 @@ html {
 
 <!-- Carousel Script for the Hero Section -->
 <script>
-const images = [
-        '../assets/imgs/imagem1.jpg',
-        '../assets/imgs/imagem2.jpg',
-        '../assets/imgs/imagem3.jpg'
-    ];
-    let currentIndex = 0;
-    const imgElement = document.getElementById('carousel-image');
+    document.addEventListener('DOMContentLoaded', function() {
+        const images = [
+            '../assets/imgs/1.png',
+            '../assets/imgs/2.png',
+            '../assets/imgs/3.png',
+            '../assets/imgs/4.png'
+        ];
+        let currentIndex = 0;
+        const imgElement = document.getElementById('carousel-image');
 
-    document.getElementById('next').addEventListener('click', () => {
-        currentIndex = (currentIndex + 1) % images.length;
-        imgElement.src = images[currentIndex];
+        document.getElementById('next').addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % images.length;
+            imgElement.src = images[currentIndex];
+        });
+
+        document.getElementById('prev').addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            imgElement.src = images[currentIndex];
+        });
+
+        // Auto play functionality
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % images.length;
+            imgElement.src = images[currentIndex];
+        }, 5000); // Change image every 5 seconds
     });
-
-    document.getElementById('prev').addEventListener('click', () => {
-        currentIndex = (currentIndex - 1 + images.length) % images.length;
-        imgElement.src = images[currentIndex];
-    });
-
-    // Auto play functionality
-    setInterval(() => {
-        currentIndex = (currentIndex + 1) % images.length;
-        imgElement.src = images[currentIndex];
-    }, 5000); // Change image every 5 seconds
 </script>
+
+
+
 
 <section class="bg-gray py-12" id="conheca">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
